@@ -12,22 +12,24 @@ import java.util.List;
 import com.aurionpro.model.Employee2;
 
 public class EmployeeUtil {
-	List<Employee2> employeeList;
+	List<Employee2> 
+	employeeList = new EmployeeReader().readEmployeeFromFile("C:\\Users\\Nitish.Shetty\\Desktop\\empList.txt");
 	private static boolean initialload = false;
 
-	public EmployeeUtil() {
-		this.employeeList = new ArrayList<>();
-		loadEmployee();
-	}
+//	public EmployeeUtil() {
+//		this.employeeList = new ArrayList<>();
+	
+//		loadEmployee();
+//	}
 
 	public List<Employee2> getEmployeeList() {
 		return employeeList;
+		
 	}
 
 	@SuppressWarnings("unchecked")
 	private void loadEmployee() {
 		if (checkIfEmpty() && initialload) {
-			List<Employee2> file = new EmployeeReader().readEmployeeFromFile("C:\\Users\\Nitish.Shetty\\Desktop\\empList.txt");
 			initialload = true;
 		} else if (!checkIfEmpty()) {
 			try {
@@ -47,6 +49,8 @@ public class EmployeeUtil {
 			}
 		}
 	}
+	
+
 	
 	public void addEmployee(Employee2 employee) {
 		employeeList.add(employee);
@@ -81,16 +85,12 @@ public class EmployeeUtil {
 	
 
 	private boolean checkIfEmpty() {
-		try {
-			FileInputStream file = new FileInputStream("C:\\Users\\Nitish.Shetty\\Desktop\\empSerialize.txt");
-			if (file.read() != -1) {
-				return false;
-			}
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+	    try (FileInputStream file = new FileInputStream("C:\\Users\\Nitish.Shetty\\Desktop\\empSerialize.txt")) {
+	        return file.read() != -1;
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return false; 
+	    }
 	}
 
 //	public static void addEmployee(List<Employee2> employees, Employee2 employee) {

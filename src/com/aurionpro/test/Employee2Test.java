@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.aurionpro.model.Employee;
 import com.aurionpro.model.Employee2;
 import com.aurionpro.util.EmployeeUtil;
 
@@ -15,7 +16,7 @@ public class Employee2Test {
     public static void main(String[] args) {
         EmployeeUtil employeeUtil = new EmployeeUtil();
         List<Employee2> employees = employeeUtil.getEmployeeList();
-
+        printAllEmployees(employees);
         System.out.println(employeeUtil.getEmployeeList());
 
         List<Employee2> distinctEmployees = distinctEmployeeList(employees);
@@ -26,14 +27,24 @@ public class Employee2Test {
         printEmployeeCountsByDepartment(departmentEmployeeCounts);
 
         System.out.println("----------------------------------");
-        Employee2 employee = findManager(employees, 7866);
+        Employee2 employee = findManager(employees, 7782);
         System.out.println("Immediate Manager: " + employee.getName());
 
         System.out.println("-------------------------------------------------");
         Double totalSalary = TotalSalary(employees);
         System.out.println("The total salary of all employees is: " + totalSalary);
+        System.out.println("-------------------------------------------------");
 
         getHighestPaidInEachDepartment(employees);
+        System.out.println("-------------------------------------------------");
+
+      Map<String, Employee2> findHighestPaidInEachRole = findHighestPaidInEachRole(employees);
+      findHighestPaidInEachRole.forEach((key,value)->System.out.println(key+" : "+value ));
+        
+        
+        
+//        employeeUtil.addEmployee(new Employee2(7866,"Nitish","CLERK",80000,7902,null,0.0,20));
+//        printAllEmployees(employees);
     }	
 	
     public static void getHighestPaidInEachDepartment(List<Employee2> employees) {
@@ -94,4 +105,19 @@ public class Employee2Test {
 	private static void printAllEmployees(List<Employee2> emps) {
         emps.forEach(System.out::println);
     }
+	
+	public static Map<String, Employee2> findHighestPaidInEachRole(List<Employee2> employees) {
+		Map<String, Employee2> highestPaidInEachRole = new HashMap<>();
+
+		for (Employee2 employee : employees) {
+			String job = employee.getRole();
+			double salary = employee.getSalary();
+
+			if (!highestPaidInEachRole.containsKey(job) || salary > highestPaidInEachRole.get(job).getSalary()) {
+				highestPaidInEachRole.put(job, employee);
+			}
+		}
+
+		return highestPaidInEachRole;
+	} 
 }
